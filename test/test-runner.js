@@ -4,7 +4,8 @@
  */
 const fs = require('fs');
 const path = require('path');
-const babel = require('@babel/core');
+const ts = require('typescript');
+require('reflect-metadata');
 
 // 1. Jest-compatible test registry supporting nested suites, async beforeEach/afterEach
 const rootSuite = {
@@ -116,39 +117,6 @@ const Module = require('module');
 const originalRequire = Module.prototype.require;
 
 Module.prototype.require = function (id) {
-  if (id === '@nestjs/common') {
-    return {
-      Injectable: () => (t) => t,
-      Module: () => (t) => t,
-      Controller: () => (t) => t,
-      Get: () => (t, k, d) => d,
-      Post: () => (t, k, d) => d,
-      Body: () => () => {},
-      Param: () => () => {},
-      Query: () => () => {},
-      HttpCode: () => (t, k, d) => d,
-      HttpStatus: { ACCEPTED: 202, OK: 200, BAD_REQUEST: 400 },
-      Logger: class {
-        log() {}
-        warn() {}
-        error() {}
-        debug() {}
-      },
-      ValidationPipe: class {},
-    };
-  }
-
-  if (id === '@nestjs/core') {
-    return {
-      NestFactory: {
-        create: async () => ({
-          useGlobalPipes: () => {},
-          listen: async () => {},
-        }),
-      },
-    };
-  }
-
   if (id === 'kafkajs') {
     return {
       Kafka: class {
@@ -191,23 +159,20 @@ Module.prototype.require = function (id) {
   return originalRequire.apply(this, arguments);
 };
 
-// 3. Setup on-the-fly TypeScript transpiler via Babel
+// 3. Setup on-the-fly TypeScript transpiler via TypeScript compiler
 require.extensions['.ts'] = function (module, filename) {
   let content = fs.readFileSync(filename, 'utf8');
-  content = content.replace(/@\w+\([^)]*\)\s*([a-zA-Z0-9_$]+)/g, '$1');
-
-  const transformed = babel.transformSync(content, {
-    presets: [
-      '/usr/share/nodejs/@babel/preset-typescript',
-      ['/usr/share/nodejs/@babel/preset-env', { targets: { node: 'current' } }],
-    ],
-    plugins: [
-      ['/usr/share/nodejs/@babel/plugin-proposal-decorators', { legacy: true }],
-      ['/usr/share/nodejs/@babel/plugin-proposal-class-properties', { loose: true }],
-    ],
-    filename,
+  const result = ts.transpileModule(content, {
+    compilerOptions: {
+      module: ts.ModuleKind.CommonJS,
+      target: ts.ScriptTarget.ES2021,
+      experimentalDecorators: true,
+      emitDecoratorMetadata: true,
+      esModuleInterop: true,
+    },
+    fileName: filename,
   });
-  return module._compile(transformed.code, filename);
+  return module._compile(result.outputText, filename);
 };
 
 // Collect ancestry chain for hooks
