@@ -1,0 +1,65 @@
+{
+  "version": "1.0.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "API Server",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "start:dev"],
+      "env": {
+        "PORT": "3000"
+      },
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "preLaunchTask": "services:prelaunch",
+      "restart": true
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Normalization Consumer",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "start:consumer:normalization"],
+      "env": {
+        "PORT": "4001"
+      },
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "preLaunchTask": "services:prelaunch",
+      "restart": true
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Schema Mapping Consumer",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "start:consumer:schema-mapping"],
+      "env": {
+        "PORT": "5001"
+      },
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "preLaunchTask": "services:prelaunch",
+      "restart": true
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Sync Consumer",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "start:consumer:sync"],
+      "env": {
+        "PORT": "6001"
+      },
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "preLaunchTask": "services:prelaunch",
+      "restart": true
+    }
+  ]
+}

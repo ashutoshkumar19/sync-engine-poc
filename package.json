@@ -1,0 +1,87 @@
+{
+  "name": "sync-engine",
+  "version": "1.0.0",
+  "description": "Bi-Directional Record Synchronization System",
+  "author": "Ashutosh Kumar",
+  "scripts": {
+    "build": "nest build",
+    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "setup:docker": "docker-compose up -d",
+    "setup:kafka": "npx tsx setup/kafka-setup.ts",
+    "start": "nest start",
+    "start:dev": "nest start --watch",
+    "start:debug": "nest start --debug --watch",
+    "start:prod": "node dist/src/main",
+    "start:main": "nest start",
+    "start:main:dev": "nest start --watch",
+    "start:consumer:normalization": "nest start --entryFile consumers/normalization/normalization.main --watch",
+    "start:consumer:schema-mapping": "nest start --entryFile consumers/schema-mapping/schema-mapping.main --watch",
+    "start:consumer:sync": "nest start --entryFile consumers/sync/sync.main --watch",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:cov": "jest --coverage",
+    "test:local": "node test/test-runner.js"
+  },
+  "dependencies": {
+    "@nestjs/common": "^11.2.8",
+    "@nestjs/core": "^11.2.8",
+    "@nestjs/microservices": "^11.2.8",
+    "@nestjs/platform-express": "^11.2.8",
+    "@nestjs/swagger": "^11.4.8",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.1",
+    "ioredis": "^5.3.2",
+    "kafkajs": "^2.2.4",
+    "pg": "^8.11.3",
+    "reflect-metadata": "^0.2.1",
+    "rxjs": "^7.8.1",
+    "tsx": "^4.23.15",
+    "uuid": "^11.1.1"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "^11.0.24",
+    "@nestjs/schematics": "^11.1.0",
+    "@nestjs/testing": "^11.2.8",
+    "@types/express": "^4.17.21",
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.11.24",
+    "@types/pg": "^8.11.0",
+    "@types/supertest": "^6.0.2",
+    "@types/uuid": "^9.0.8",
+    "concurrently": "^10.0.6",
+    "jest": "^29.7.0",
+    "prettier": "^3.9.10",
+    "source-map-support": "^0.5.21",
+    "supertest": "^6.3.4",
+    "ts-jest": "^29.1.2",
+    "ts-loader": "^9.5.1",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.3.3",
+    "wait-on": "^9.5.1"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts"
+    ],
+    "rootDir": "src",
+    "testRegex": ".*\\.spec\\.ts$",
+    "transform": {
+      "^.+\\.(t|j)s$": "ts-jest"
+    },
+    "collectCoverageFrom": [
+      "**/*.(t|j)s"
+    ],
+    "coverageDirectory": "../coverage",
+    "testEnvironment": "node"
+  },
+  "overrides": {
+    "multer": "^2.5.0",
+    "@nestjs/cli": {
+      "glob": "^14.0.2",
+      "minimatch": "^11.0.1"
+    }
+  }
+}

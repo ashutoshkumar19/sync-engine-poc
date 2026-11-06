@@ -1,0 +1,34 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "services:prelaunch",
+      "dependsOrder": "sequence",
+      "dependsOn": ["root:install", "root:setup-docker", "root:setup-kafka"]
+    },
+    {
+      "label": "root:install",
+      "type": "shell",
+      "command": "npm install",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      }
+    },
+    {
+      "label": "root:setup-docker",
+      "type": "shell",
+      "command": "npm run setup:docker",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      }
+    },
+    {
+      "label": "root:setup-kafka",
+      "type": "shell",
+      "command": "npm run setup:kafka",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      }
+    }
+  ]
+}
